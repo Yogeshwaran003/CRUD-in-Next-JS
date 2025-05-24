@@ -5,7 +5,7 @@ import Element from "@/components/Element";
 import { useState } from "react";
 
 export default function Home() {
-  const [job, setJob] = useState<String[]>([]);
+  const [job, setJob] = useState<string[]>([]);
   const[statement,setStatement]=useState("");
 
 
