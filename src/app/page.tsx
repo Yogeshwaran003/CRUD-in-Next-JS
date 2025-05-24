@@ -1,24 +1,34 @@
 "use client";
 
-// import Image from "next/image";
 import Element from "@/components/Element";
 import { useState } from "react";
 
 export default function Home() {
   const [job, setJob] = useState<string[]>([]);
-  const[statement,setStatement]=useState("");
+  const [statement, setStatement] = useState("");
+  const [editIndex, setEditIndex] = useState<number | null>(null);
 
 
-  function addingTask(){
-    if(statement.trim()!==""){
-      setJob([...job,statement]);
-      setStatement("");
+  function addingTask() {
+    if (editIndex !== null) {
+      const updatedJobs = [...job];
+      updatedJobs[editIndex] = statement;
+      setJob(updatedJobs);
+      setEditIndex(null); 
+    } else if(statement.trim() !== "") {
+      setJob([...job, statement]);
     }
+    setStatement("");
   }
 
-  function deleteTask(num:number){
-    const updateJob=job.filter((_,i)=>i!==num)
-    setJob(updateJob);
+  function deleteTask(index: number) {
+    const updatedJobs = job.filter((_, i) => i !== index);
+    setJob(updatedJobs);
+  }
+
+  function startUpdate(index: number) {
+    setStatement(job[index]);
+    setEditIndex(index);
   }
 
 
@@ -33,7 +43,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col gap-6">
-        {job.map((task,i)=><Element key={i} task={task} del={deleteTask} id={i}/>)}
+        {job.map((task,i)=><Element key={i} task={task} update={startUpdate} del={deleteTask} id={i}/>)}
       </div>
     </div>
   );
